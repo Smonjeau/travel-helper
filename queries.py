@@ -8,7 +8,7 @@ def routes_with_scales_support (mins_scales, max_scales, source, destination, co
 
 def airports_reachable_from_airport(source, scales, code_type):
     from_code_condition = f"icao: \"{source}\"" if code_type == "ICAO" else f"iata: \"{source}\""
-    return f"MATCH p=(n:Airport {{{from_code_condition}}}) -[:HAS_ROUTE_TO*{scales}]->(m:Airport) WITH *,relationships(p) as r RETURN p"
+    return f"MATCH p=(n:Airport {{{from_code_condition}}}) -[:HAS_ROUTE_TO*{scales}]->(m:Airport) WITH *,relationships(p) as r RETURN p,r"
 
 def shorthest_route_between_two_airports(source, destination, code_type):
     from_code_condition = f"icao: \"{source}\"" if code_type == "ICAO" else f"iata: \"{source}\""

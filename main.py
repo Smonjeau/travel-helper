@@ -11,6 +11,10 @@ neo4j_port = os.environ.get('NEO4J_PORT', 7687)
 #TODO siempre acordarse de pasar todo a mayuscula o minuscula para comparar
 #TODO al comparar code_types pasar a minuscula
 
+
+
+#neo4jClient = GraphDatabase.driver(f"neo4j://192.168.0.246/:{neo4j_port}")
+
 neo4jClient = GraphDatabase.driver(f"neo4j://127.0.0.1/:{neo4j_port}")
 
 # neo4jClient = GraphDatabase.driver(f"neo4j://localhost:{neo4j_port}")
@@ -93,7 +97,7 @@ def get_airports_reachable_from_airport(source_airport_code: str, airport_code_t
     if(scales > 3):
         raise HTTPException(status_code=400, detail="Scales must be 3 or less")
     results = neo4jSession.run(
-        airports_reachable_from_airport(source_airport_code, airport_code_type,scales)
+        airports_reachable_from_airport(source_airport_code, scales,airport_code_type)
     )
 
     return parseResults(results, airport_code_type)
