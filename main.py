@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from neo4j import GraphDatabase
+from utils import validate_airport_codes
 import os
 app = FastAPI()
 
@@ -17,19 +18,21 @@ neo4jSession = neo4jClient.session()
 
 
 
-
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
 
 @app.get("/queries/all_routes")
-def get_all_routes_between_two_airports(source_airport_code, destination_airport_code):
-    #TODO validar datos y tipos de codigos
+def get_all_routes_between_two_airports(source_airport_code, destination_airport_code, airport_code_type):
+    
+    validate_airport_codes(source_airport_code, destination_airport_code, airport_code_type)
+
     max_steps = 1
+
     result  = neo4jSession.run(
      
-        neo_query(max_steps,source_airport_code,destination_airport_code)
+        neo_query(max_steps,source_airport_code,destination_airport_code, airport_code_type)
      
      )
      # iterate over the result set 
@@ -50,10 +53,15 @@ def get_all_routes_between_two_airports(source_airport_code, destination_airport
 
 
 @app.get("/queries/all_routes_with_scales")
-def get_all_routes_between_two_airports_with_scales(source_airport_code, destination_airport_code,scales):
-  result = neo4jSession.run(
+def get_all_routes_between_two_airports_with_scales(source_airport_code, destination_airport_code, airport_code_type, scales):
+
+    validate_airport_codes(source_airport_code, destination_airport_code, airport_code_type)        
+    if(scales > 3):
+        raise HTTPException(status_code=400, detail="Scales must be 3 or less")
+
+    result = neo4jSession.run(
      
-        neo_query(scales,source_airport_code,destination_airport_code)
+        neo_query(scales,source_airport_code,destination_airport_code, airport_code_type)
      
      )
 
@@ -68,5 +76,5 @@ def get_shorthest_route_between_two_airports(source_airport_code, destination_ai
     return result.single()[0]
 
 
-def neo_query (scales,source,destination):
+def neo_query (scales, source, destination, code_type):
     return f"MATCH p=(n:Airport {{icao:\"{source}\"}}) -[:HAS_ROUTE_TO*0..{scales}]->(m:Airport{{icao:\"{destination}\"}}) WITH *,relationships(p) as r RETURN n,m,r,nodes(p)"
