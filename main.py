@@ -57,7 +57,15 @@ def get_all_routes_between_two_airports_with_scales(source_airport_code, destina
      
      )
 
-
+@app.get("/queries/shortet_route_in_scales")
+def get_shorthest_route_between_two_airports(source_airport_code, destination_airport_code):
+    result = neo4jSession.run(
+     
+        f"MATCH p=shortestPath((n:Airport {{icao: \"{source_airport_code}\"}})-[:HAS_ROUTE_TO*1..4]-(m:Airport {{icao: \"{destination_airport_code}\"}}))RETURN p; "
+     
+     )
+    #TODO devolver bien la info
+    return result.single()[0]
 
 
 def neo_query (scales,source,destination):
