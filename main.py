@@ -24,7 +24,7 @@ def read_root():
 
 
 @app.get("/queries/all_routes")
-def get_all_routes_between_two_airports(source_airport_code, destination_airport_code, airport_code_type):
+def get_all_routes_between_two_airports(source_airport_code: str, destination_airport_code: str, airport_code_type: str):
     
     validate_airport_codes(source_airport_code, destination_airport_code, airport_code_type)
 
@@ -53,7 +53,7 @@ def get_all_routes_between_two_airports(source_airport_code, destination_airport
 
 
 @app.get("/queries/all_routes_with_scales")
-def get_all_routes_between_two_airports_with_scales(source_airport_code, destination_airport_code, airport_code_type, scales):
+def get_all_routes_between_two_airports_with_scales(source_airport_code: str, destination_airport_code: str, airport_code_type: str, scales: int):
 
     validate_airport_codes(source_airport_code, destination_airport_code, airport_code_type)        
     if(scales > 3):
@@ -65,8 +65,13 @@ def get_all_routes_between_two_airports_with_scales(source_airport_code, destina
      
      )
 
-@app.get("/queries/shortet_route_in_scales")
-def get_shorthest_route_between_two_airports(source_airport_code, destination_airport_code):
+@app.get("/queries/shortest_route_in_scales")
+def get_shorthest_route_between_two_airports(source_airport_code: str, destination_airport_code: str, airport_code_type: str):
+
+    validate_airport_codes(source_airport_code, destination_airport_code, airport_code_type)
+
+    #TODO usar ICAO o IATA depende el codetype
+
     result = neo4jSession.run(
      
         f"MATCH p=shortestPath((n:Airport {{icao: \"{source_airport_code}\"}})-[:HAS_ROUTE_TO*1..4]-(m:Airport {{icao: \"{destination_airport_code}\"}}))RETURN p; "
@@ -77,4 +82,5 @@ def get_shorthest_route_between_two_airports(source_airport_code, destination_ai
 
 
 def neo_query (scales, source, destination, code_type):
+    #TODO usar ICAO o IATA depende el codetype
     return f"MATCH p=(n:Airport {{icao:\"{source}\"}}) -[:HAS_ROUTE_TO*0..{scales}]->(m:Airport{{icao:\"{destination}\"}}) WITH *,relationships(p) as r RETURN n,m,r,nodes(p)"
