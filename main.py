@@ -1,15 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from neo4j import GraphDatabase
-from utils import validate_airport_codes, parseResults
+from utils import validate_airport_codes, parseResults, max_scales
 from queries import airports_reachable_from_airport, routes_with_scales_support, shorthest_route_between_two_airports
 import os
 app = FastAPI()
+
 
 
 neo4j_port = os.environ.get('NEO4J_PORT', 7687)
 
 #TODO siempre acordarse de pasar todo a mayuscula o minuscula para comparar
 #TODO al comparar code_types pasar a minuscula
+#TODO manejar bien posibles errores (neo principalmente)
 
 
 
@@ -18,7 +20,7 @@ neo4j_port = os.environ.get('NEO4J_PORT', 7687)
 neo4jClient = GraphDatabase.driver(f"neo4j://127.0.0.1/:{neo4j_port}")
 
 # neo4jClient = GraphDatabase.driver(f"neo4j://localhost:{neo4j_port}")
-neo4jSession = neo4jClient.session()
+
 
 
 
@@ -36,24 +38,15 @@ def get_all_routes_between_two_airports(source_airport_code: str, destination_ai
     
     validate_airport_codes(source_airport_code, destination_airport_code, airport_code_type)
 
-    max_steps = 1 # TODO ver cual será el max_steps
-
-    result  = neo4jSession.run(
+    try:
+        neo4jSession = neo4jClient.session()
+        result  = neo4jSession.run( 
+            routes_with_scales_support(0, max_scales, source_airport_code,destination_airport_code, airport_code_type)
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
      
-        routes_with_scales_support(0, max_steps,source_airport_code,destination_airport_code, airport_code_type)
-     
-     )
-     # iterate over the result set 
-    
-    
-    values = []
-    for ix, record in enumerate(result):
-        if ix > 1:
-            break
-        values.append(record.values())
-    info = result.consume()
-    print(values,result)
-    return {"info":info, "values":values}
+    return parseResults(result, airport_code_type)
 
 
 
@@ -65,12 +58,16 @@ def get_all_routes_between_two_airports(source_airport_code: str, destination_ai
 def get_all_routes_between_two_airports_with_scales(source_airport_code: str, destination_airport_code: str, airport_code_type: str, scales: int):
 
     validate_airport_codes(source_airport_code, destination_airport_code, airport_code_type)        
-    if(scales > 3):
+    if(scales > 3 or scales < 0):
         raise HTTPException(status_code=400, detail="Scales must be 3 or less")
-
-    results = neo4jSession.run(
-        routes_with_scales_support(scales, scales,source_airport_code,destination_airport_code, airport_code_type)
-    )
+    
+    try:
+        neo4jSession = neo4jClient.session()
+        results = neo4jSession.run(
+            routes_with_scales_support(scales, scales, source_airport_code,destination_airport_code, airport_code_type)
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
     return parseResults(results, airport_code_type)
     
@@ -83,9 +80,13 @@ def get_shorthest_route_between_two_airports(source_airport_code: str, destinati
     validate_airport_codes(source_airport_code, destination_airport_code, airport_code_type)
 
 
-    results = neo4jSession.run(
-        shorthest_route_between_two_airports(source_airport_code, destination_airport_code, airport_code_type)     
-     )
+    try:
+        neo4jSession = neo4jClient.session()
+        results = neo4jSession.run(
+            shorthest_route_between_two_airports(source_airport_code, destination_airport_code, airport_code_type)     
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
     return parseResults(results, airport_code_type)
 
@@ -94,11 +95,16 @@ def get_airports_reachable_from_airport(source_airport_code: str, airport_code_t
 
     validate_airport_codes(source_airport_code, source_airport_code, airport_code_type)
 
-    if(scales > 3):
-        raise HTTPException(status_code=400, detail="Scales must be 3 or less")
-    results = neo4jSession.run(
-        airports_reachable_from_airport(source_airport_code, scales,airport_code_type)
-    )
+    if(scales < 0):
+        raise HTTPException(status_code=400, detail="Scales must be at least 0")
+
+    try:
+        neo4jSession = neo4jClient.session()
+        results = neo4jSession.run(
+            airports_reachable_from_airport(source_airport_code, scales, airport_code_type)
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
     return parseResults(results, airport_code_type)
 

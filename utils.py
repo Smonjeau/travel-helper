@@ -1,5 +1,7 @@
 from fastapi import HTTPException
 
+max_scales = 2
+
 def validate_airport_codes(source_airport_code, destination_airport_code, airport_code_type):
     if airport_code_type == "IATA":
         if (len(source_airport_code) != 3) or (len(destination_airport_code) != 3):
