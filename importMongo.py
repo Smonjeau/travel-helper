@@ -1,15 +1,12 @@
 import csv
 import os
-from pymongo import MongoClient
 import pymongo
-
 if __name__ == "__main__":
-    mongo_port = os.environ['MONGO_PORT']
-else:
-    mongo_port = 27017
+    mongo_port = os.environ.get('MONGO_PORT', 27017)
+    neo4j_port = os.environ.get('NEO4J_PORT', 7687)
 
-client = MongoClient(port=mongo_port)
-    
+mongoClient = pymongo.MongoClient(port=mongo_port)
+
 
 # Airport csv headers (not included in the .dat file)
 airportHeaders = ['airport_id', 'name', 'city', 'country', 'iata', 'icao',
@@ -17,7 +14,7 @@ airportHeaders = ['airport_id', 'name', 'city', 'country', 'iata', 'icao',
                   'timezone', 'dst', 'tz_type']
 
 # Map that matches header with type
-mapHeaderToType = {
+mapAirportHeaderToType = {
     'airport_id': int,
     'name': str,
     'city': str,
@@ -32,17 +29,34 @@ mapHeaderToType = {
     'tz_type': str
 }
 
+
 # Routes csv headers (not included in the .dat file)
 routesHeaders = ['airline', 'airline_id', 'source_airport',
                  'source_airport_id', 'destination_airport',
                  'destination_airport_id', 'code', 'stops', 'equipment']
 
+countriesHeaders = ['name', 'iso_code', 'dafif_code']
+
+airlinesHeaders = ['airline_id', 'name', 'alias',
+                   'iata', 'icao', 'callsign', 'country', 'active']
+mapAirlineHeaderToType = {
+    'airline_id': int,
+    'name': str,
+    'alias': str,
+    'iata': str,
+    'icao': str,
+    'callsign': str,
+    'country': str,
+    'active': str,
+}
 
 airports = csv.reader(open("data/airports.dat"), delimiter=',')
 routes = csv.reader(open("data/routes.dat"), delimiter=',')
-outAirports = open("out/airports.csv", 'w')
+countries = csv.reader(open("data/countries.dat"), delimiter=',')
+airlines = csv.reader(open("data/airlines.dat"), delimiter=',')
 
-db = client['travel-helper']
+
+mongoDb = mongoClient['travel-helper']
 
 
 documents = []
@@ -56,14 +70,14 @@ for airport in airports:
                 float(airport[i+1]), float(airport[i])]}
         elif i != 7:
             document[airportHeaders[i]
-                     ] = mapHeaderToType[airportHeaders[i]](airport[i])
+                     ] = mapAirportHeaderToType[airportHeaders[i]](airport[i])
     documents.append(document)
 
-db.airports.insert_many(documents)
+mongoDb.airports.insert_many(documents)
 
-db.airports.create_index([('geom', pymongo.GEOSPHERE)])
+mongoDb.airports.create_index([('geom', pymongo.GEOSPHERE)])
 
-db.airports.create_index('airport_id')
+mongoDb.airports.create_index('airport_id')
 
 
 documents = []
@@ -73,17 +87,17 @@ for route in routes:
         source_airport_id = route[3]
         destination_airport_id = route[5]
 
-        source_airport = db.airports.find_one(
+        source_airport = mongoDb.airports.find_one(
             {"airport_id": int(source_airport_id)}, {})
-        destination_airport = db.airports.find_one(
+        destination_airport = mongoDb.airports.find_one(
             {"airport_id": int(destination_airport_id)}, {})
-        #If the source and destination airport aren't defined in our airports database we skip the route
+        # If the source and destination airport aren't defined in our airports database we skip the route
         if source_airport == None or destination_airport == None:
             continue
         doc = {}
         for i in range(0, len(routesHeaders)):
             doc[routesHeaders[i]] = route[i]
-        doc['distance'] = list(db.airports.aggregate(([
+        doc['distance'] = list(mongoDb.airports.aggregate(([
             {
                 "$geoNear": {
                     "near": {
@@ -100,4 +114,28 @@ for route in routes:
 
         documents.append(doc)
 
-db.routes.insert_many(documents)
+mongoDb.routes.insert_many(documents)
+
+documents = []
+for country in countries:
+    document = {}
+    if country[1] != '\\N':
+        for i in range(0, len(countriesHeaders)):
+            document[countriesHeaders[i]] = country[i]
+        documents.append(document)
+mongoDb.countries.insert_many(documents)
+
+
+documents = []
+for airline in airlines:
+    doc = {}
+    i = 0
+    for header in airlinesHeaders:
+
+        if airline[i] == '\\N':
+            doc[header] = None
+        else:
+            doc[header] = mapAirlineHeaderToType[header](airline[i])
+        i += 1
+    documents.append(doc)
+mongoDb.airlines.insert_many(documents)
