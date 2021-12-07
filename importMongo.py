@@ -115,6 +115,10 @@ for route in routes:
         documents.append(doc)
 
 mongoDb.routes.insert_many(documents)
+mongoDb.routes.create_index('source_airport_id')
+mongoDb.routes.create_index('destination_airport_id')
+mongoDb.routes.create_index('airline_id')
+
 
 documents = []
 for country in countries:
@@ -139,3 +143,5 @@ for airline in airlines:
         i += 1
     documents.append(doc)
 mongoDb.airlines.insert_many(documents)
+
+mongoDb.airlines.create_index('airline_id')
