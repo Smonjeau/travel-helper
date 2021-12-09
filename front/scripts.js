@@ -44,6 +44,7 @@ $('#search1').click(function(){
     let source = $('#source1').val();
     let destination = $('#destination1').val();
     let code = $('#code1').val();
+    let page = $('#page1').val();
 
     if(code.toLowerCase() === 'iata'){
         if(source.length != 3 || destination.length != 3) {
@@ -67,7 +68,8 @@ $('#search1').click(function(){
         data: { 
             source_airport_code: source,
             destination_airport_code: destination,
-            airport_code_type: code
+            airport_code_type: code,
+            page: parseInt(page)
         },
         dataType: "json",
         success: function (response) {
@@ -85,6 +87,7 @@ $('#search2').click(function(){
     let destination = $('#destination2').val();
     let scales = $('#scales2').val();
     let code = $('#code2').val();
+    let page = $('#page2').val();
 
     if(code.toLowerCase() === 'iata'){
         if(source.length != 3 || destination.length != 3) {
@@ -109,7 +112,8 @@ $('#search2').click(function(){
             source_airport_code: source,
             destination_airport_code: destination,
             airport_code_type: code,
-            scales: scales
+            scales: scales,
+            page: parseInt(page)
         },
         dataType: "json",
         success: function (response) {
@@ -126,6 +130,7 @@ $('#search3').click(function(){
     let source = $('#source3').val();
     let scales = $('#scales3').val();
     let code = $('#code3').val();
+    let page = $('#page3').val();
 
     if(code.toLowerCase() === 'iata'){
         if(source.length != 3) {
@@ -149,7 +154,8 @@ $('#search3').click(function(){
         data: { 
             source_airport_code: source,
             airport_code_type: code,
-            scales: scales
+            scales: scales,
+            page: parseInt(page)
         },
         dataType: "json",
         success: function (response) {
@@ -207,6 +213,7 @@ $('#search5').click(function(){
     let destination = $('#destination5').val();
     let avoidairline = $('#avoidairline5').val();
     let code = $('#code5').val();
+    let page = $('#page5').val();
 
     if(code.toLowerCase() === 'iata'){
         if(source.length != 3 || destination.length != 3) {
@@ -231,7 +238,8 @@ $('#search5').click(function(){
             source_airport_code: source,
             destination_airport_code: destination,
             airport_code_type: code,
-            airline_code: avoidairline
+            airline_code: avoidairline,
+            page: parseInt(page)
         },
         dataType: "json",
         success: function (response) {
@@ -251,6 +259,7 @@ $('#search6').click(function(){
     let destination = $('#destination6').val();
     let avoidairport = $('#avoidairport6').val();
     let code = $('#code6').val();
+    let page = $('#page6').val();
 
     if(code.toLowerCase() === 'iata'){
         if(source.length != 3 || destination.length != 3) {
@@ -275,7 +284,8 @@ $('#search6').click(function(){
             source_airport_code: source,
             destination_airport_code: destination,
             airport_code_type: code,
-            airport_code: avoidairport
+            airport_code: avoidairport,
+            page: parseInt(page)
         },
         dataType: "json",
         success: function (response) {

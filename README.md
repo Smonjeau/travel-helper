@@ -2,6 +2,7 @@
 
 ## Considerations
 - Airport codes can be [IATA](https://www.nationsonline.org/oneworld/IATA_Codes/airport_code_list.htm) or [ICAO](https://en.wikipedia.org/wiki/List_of_airports_by_ICAO_code:_A).
+- Airlines codes can be also [IATA or ICAO] (https://en.wikipedia.org/wiki/List_of_airline_codes)
 - The maximum number of scales is 2. (Can be modified from the code)
 
 ## Set up

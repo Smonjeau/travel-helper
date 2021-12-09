@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 
 max_scales = 2
-
+page_size = 10
 
 def validate_airport_codes(airport_code_type, *args):
     if airport_code_type == "IATA":

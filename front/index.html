@@ -14,20 +14,22 @@
             <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
                 <h3 class="uk-card-title">All routes from A to B</h3>
                 <div uk-grid>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="source1" placeholder="Source Airport">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="destination1" placeholder="Destination Airport">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <select class="uk-select" id="code1">
                             <option>IATA</option>
                             <option>ICAO</option>
                         </select>
                     </div>
-                    <div class="uk-width-1-5"></div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
+                        <input class="uk-input" type="number" min="1" id="page1" value="1" title="Page">
+                    </div>
+                    <div class="uk-width-1-6">
                         <button class="uk-button uk-button-primary" id="search1">Search</button>
                     </div>
                 </div>
@@ -37,22 +39,25 @@
             <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
                 <h3 class="uk-card-title">All routes from A to B with N scales</h3>
                 <div uk-grid>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="source2" placeholder="Source Airport">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="destination2" placeholder="Destination Airport">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <select class="uk-select" id="code2">
                             <option>IATA</option>
                             <option>ICAO</option>
                         </select>
                     </div>
-                    <div class="uk-width-1-5">
-                        <input class="uk-input uk-margin-small-bottom" type="number" max="2" min="0" value="0" id="scales2" placeholder="Scales">
+                    <div class="uk-width-1-6">
+                        <input class="uk-input uk-margin-small-bottom" type="number" max="2" min="0" title="Scales" value="0" id="scales2" placeholder="Scales">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
+                        <input class="uk-input" type="number" min="1" value="1" title="Page" id="page2">
+                    </div>
+                    <div class="uk-width-1-6">
                         <button class="uk-button uk-button-primary" id="search2">Search</button>
                     </div>
                 </div>
@@ -62,20 +67,24 @@
             <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
                 <h3 class="uk-card-title">All airports reachable from airport</h3>
                 <div uk-grid>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="source3" placeholder="Source Airport">
                     </div>
-                    <div class="uk-width-1-5"></div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6"></div>
+                    <div class="uk-width-1-6">
                         <select class="uk-select" id="code3">
                             <option>IATA</option>
                             <option>ICAO</option>
                         </select>
                     </div>
-                    <div class="uk-width-1-5">
-                        <input class="uk-input uk-margin-small-bottom" type="number" max="2" min="0" value="0" id="scales3" placeholder="Scales">
+                    <div class="uk-width-1-6">
+                        <input class="uk-input uk-margin-small-bottom" type="number" max="2" min="0" title="Scales" value="0" id="scales3" placeholder="Scales">
                     </div>
-                    <div class="uk-width-1-5">
+
+                    <div class="uk-width-1-6">
+                        <input class="uk-input" type="number" min="1" value="1" title="Page" id="page3">
+                    </div>
+                    <div class="uk-width-1-6">
                         <button class="uk-button uk-button-primary" id="search3">Search</button>
                     </div>
                 </div>
@@ -85,20 +94,23 @@
             <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
                 <h3 class="uk-card-title">Shortest route</h3>
                 <div uk-grid>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="source4" placeholder="Source Airport">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="destination4" placeholder="Destination Airport">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <select class="uk-select" id="code4">
                             <option>IATA</option>
                             <option>ICAO</option>
                         </select>
                     </div>
-                    <div class="uk-width-1-5"></div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6"></div>
+
+                    <div class="uk-width-1-6">
+                    </div>
+                    <div class="uk-width-1-6">
                         <button class="uk-button uk-button-primary" id="search4">Search</button>
                     </div>
                 </div>
@@ -108,22 +120,26 @@
             <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
                 <h3 class="uk-card-title">Routes avoiding airline</h3>
                 <div uk-grid>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="source5" placeholder="Source Airport">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="destination5" placeholder="Destination Airport">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="avoidairline5" placeholder="Airline to avoid">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <select class="uk-select" id="code5">
                             <option>IATA</option>
                             <option>ICAO</option>
                         </select>
                     </div>
-                    <div class="uk-width-1-5">
+
+                    <div class="uk-width-1-6">
+                        <input class="uk-input" type="number" min="1" value="1" title="Page" id="page5">
+                    </div>
+                    <div class="uk-width-1-6">
                         <button class="uk-button uk-button-primary" id="search5">Search</button>
                     </div>
                 </div>
@@ -133,22 +149,25 @@
             <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
                 <h3 class="uk-card-title">Routes avoiding airport</h3>
                 <div uk-grid>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="source6" placeholder="Source Airport">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="destination6" placeholder="Destination Airport">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="avoidairport6" placeholder="Airport to avoid">
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
                         <select class="uk-select" id="code6">
                             <option>IATA</option>
                             <option>ICAO</option>
                         </select>
                     </div>
-                    <div class="uk-width-1-5">
+                    <div class="uk-width-1-6">
+                        <input class="uk-input" type="number" min="1" value="1" title="Page" id="page6">
+                    </div>
+                    <div class="uk-width-1-6">
                         <button class="uk-button uk-button-primary" id="search6">Search</button>
                     </div>
                 </div>

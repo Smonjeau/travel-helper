@@ -35,7 +35,7 @@ def read_root():
 
 # query 3
 @app.get("/queries/all_routes")
-def get_all_routes_between_two_airports(source_airport_code: str, destination_airport_code: str, airport_code_type: str):
+def get_all_routes_between_two_airports(source_airport_code: str, destination_airport_code: str, airport_code_type: str,page:int):
 
     validate_airport_codes(airport_code_type, source_airport_code,
                            destination_airport_code)
@@ -44,7 +44,7 @@ def get_all_routes_between_two_airports(source_airport_code: str, destination_ai
         neo4jSession = neo4jClient.session()
         result = neo4jSession.run(
             routes_with_scales_support(0, max_scales, source_airport_code.upper(
-            ), destination_airport_code.upper(), airport_code_type)
+            ), destination_airport_code.upper(), airport_code_type,page)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -53,7 +53,7 @@ def get_all_routes_between_two_airports(source_airport_code: str, destination_ai
 
 
 @app.get("/queries/all_routes_with_scales")
-def get_all_routes_between_two_airports_with_scales(source_airport_code: str, destination_airport_code: str, airport_code_type: str, scales: int):
+def get_all_routes_between_two_airports_with_scales(source_airport_code: str, destination_airport_code: str, airport_code_type: str, scales: int,page:int):
 
     validate_airport_codes(airport_code_type, source_airport_code,
                            destination_airport_code)
@@ -64,7 +64,7 @@ def get_all_routes_between_two_airports_with_scales(source_airport_code: str, de
         neo4jSession = neo4jClient.session()
         results = neo4jSession.run(
             routes_with_scales_support(scales, scales, source_airport_code.upper(
-            ), destination_airport_code.upper(), airport_code_type)
+            ), destination_airport_code.upper(), airport_code_type,page)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -92,7 +92,7 @@ def get_shorthest_route_between_two_airports(source_airport_code: str, destinati
 
 
 @app.get("/queries/airports_reachable_from_airport")
-def get_airports_reachable_from_airport(source_airport_code: str, airport_code_type: str, scales: int):
+def get_airports_reachable_from_airport(source_airport_code: str, airport_code_type: str, scales: int,page:int):
 
     validate_airport_codes(airport_code_type, source_airport_code,
                            source_airport_code)
@@ -105,7 +105,7 @@ def get_airports_reachable_from_airport(source_airport_code: str, airport_code_t
         neo4jSession = neo4jClient.session()
         results = neo4jSession.run(
             airports_reachable(source_airport_code.upper(),
-                               scales, airport_code_type)
+                               scales, airport_code_type,page)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -114,7 +114,7 @@ def get_airports_reachable_from_airport(source_airport_code: str, airport_code_t
 
 
 @app.get("/queries/all_routes_avoiding_airline")
-def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airline_code: str):
+def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airline_code: str,page:int):
 
     validate_airport_codes(airport_code_type, source_airport_code,
                            destination_airport_code)
@@ -125,7 +125,7 @@ def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: st
             all_routes_between_two_airports_avoiding_airline(source_airport_code.upper(),
                                                              destination_airport_code.upper(),
                                                              airport_code_type,
-                                                             airline_code.upper(), airport_code_type)
+                                                             airline_code.upper(), airport_code_type,page)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -134,7 +134,7 @@ def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: st
 
 
 @app.get("/queries/all_routes_avoiding_airport")
-def get_all_routes_between_two_airports_avoiding_airport(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airport_code: str):
+def get_all_routes_between_two_airports_avoiding_airport(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airport_code: str,page:int):
 
     validate_airport_codes(airport_code_type, source_airport_code,
                            destination_airport_code)
@@ -144,7 +144,7 @@ def get_all_routes_between_two_airports_avoiding_airport(source_airport_code: st
             all_routes_between_two_airports_avoiding_airport(source_airport_code.upper(),
                                                              destination_airport_code.upper(),
                                                              airport_code.upper(),
-                                                             airport_code_type)
+                                                             airport_code_type,page)
 
         )
     except Exception as e:
