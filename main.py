@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from neo4j import GraphDatabase
 import pymongo
 from utils import validate_airline_code, validate_airport_codes, parseResults, max_scales
-from queries import airports_reachable, all_routes_between_two_airports_avoiding_airline, routes_with_scales_support, shorthest_route_between_two_airports
+from queries import airports_reachable, all_routes_between_two_airports_avoiding_airline, all_routes_between_two_airports_avoiding_airport, routes_with_scales_support, shorthest_route_between_two_airports
 import os
 app = FastAPI()
 
@@ -37,7 +37,7 @@ def read_root():
 @app.get("/queries/all_routes")
 def get_all_routes_between_two_airports(source_airport_code: str, destination_airport_code: str, airport_code_type: str):
 
-    validate_airport_codes(airport_code_type,source_airport_code,
+    validate_airport_codes(airport_code_type, source_airport_code,
                            destination_airport_code)
 
     try:
@@ -55,7 +55,7 @@ def get_all_routes_between_two_airports(source_airport_code: str, destination_ai
 @app.get("/queries/all_routes_with_scales")
 def get_all_routes_between_two_airports_with_scales(source_airport_code: str, destination_airport_code: str, airport_code_type: str, scales: int):
 
-    validate_airport_codes(airport_code_type,source_airport_code,
+    validate_airport_codes(airport_code_type, source_airport_code,
                            destination_airport_code)
     if(scales > 3 or scales < 0):
         raise HTTPException(status_code=400, detail="Scales must be 3 or less")
@@ -76,7 +76,7 @@ def get_all_routes_between_two_airports_with_scales(source_airport_code: str, de
 @app.get("/queries/shortest_route_in_scales")
 def get_shorthest_route_between_two_airports(source_airport_code: str, destination_airport_code: str, airport_code_type: str):
 
-    validate_airport_codes(airport_code_type,source_airport_code,
+    validate_airport_codes(airport_code_type, source_airport_code,
                            destination_airport_code)
 
     try:
@@ -94,7 +94,7 @@ def get_shorthest_route_between_two_airports(source_airport_code: str, destinati
 @app.get("/queries/airports_reachable_from_airport")
 def get_airports_reachable_from_airport(source_airport_code: str, airport_code_type: str, scales: int):
 
-    validate_airport_codes(airport_code_type,source_airport_code,
+    validate_airport_codes(airport_code_type, source_airport_code,
                            source_airport_code)
 
     if(scales < 0):
@@ -116,7 +116,7 @@ def get_airports_reachable_from_airport(source_airport_code: str, airport_code_t
 @app.get("/queries/all_routes_avoiding_airline")
 def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airline_code: str, airline_code_type: str):
 
-    validate_airport_codes(airport_code_type,source_airport_code,
+    validate_airport_codes(airport_code_type, source_airport_code,
                            destination_airport_code)
     validate_airline_code(airline_code, airline_code_type)
     try:
@@ -136,17 +136,16 @@ def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: st
 @app.get("/queries/all_routes_avoiding_airport")
 def get_all_routes_between_two_airports_avoiding_airport(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airport_code: str):
 
-    validate_airport_codes(airport_code_type,source_airport_code,
+    validate_airport_codes(airport_code_type, source_airport_code,
                            destination_airport_code)
-
-
     try:
         neo4jSession = neo4jClient.session()
         results = neo4jSession.run(
-            all_routes_between_two_airports_avoiding_airline(source_airport_code.upper(),
+            all_routes_between_two_airports_avoiding_airport(source_airport_code.upper(),
                                                              destination_airport_code.upper(),
-                                                             airport_code_type,
-                                                             airline_code.upper())
+                                                             airport_code.upper(),
+                                                             airport_code_type)
+
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

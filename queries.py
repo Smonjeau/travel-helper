@@ -37,3 +37,14 @@ def all_routes_between_two_airports_avoiding_airline(source, destination, code_t
             f"WHERE NOT ANY(route IN r WHERE route.{airline_code_condition}) "
             "AND SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p) "
             "return p,r")
+
+
+def all_routes_between_two_airports_avoiding_airport(source, destination, avoid, code_type):
+    from_code_condition = f"icao: \"{source}\"" if code_type == "ICAO" else f"iata: \"{source}\" "
+    destination_code_condition = f"icao: \"{destination}\"" if code_type == "ICAO" else f"iata: \"{destination}\" "
+    avoid_code_condition = f"icao <> \"{avoid}\"" if code_type == "ICAO" else f"iata <> \"{avoid}\" "
+    return (f"MATCH p=(n:Airport {{{from_code_condition}}})-[r:HAS_ROUTE_TO*1..{max_scales}]->(m:Airport {{{destination_code_condition}}}) "
+            "WITH *,relationships(p) as r "
+            f"WHERE ALL(airport IN NODES(p) WHERE airport.{avoid_code_condition}) "
+            "AND SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p) "
+            "return p,r")
