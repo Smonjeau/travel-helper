@@ -183,3 +183,89 @@ $('#search4').click(function(){
     });
 
 })
+
+$('#search5').click(function(){
+    let source = $('#source5').val();
+    let destination = $('#destination5').val();
+    let avoidairline = $('#avoidairline5').val();
+    let code = $('#code5').val();
+
+    if(code.toLowerCase() === 'iata'){
+        if(source.length != 3 || destination.length != 3) {
+            alert("Worng parameters")
+            return
+        }
+    } else if(code.toLowerCase() === 'icao'){
+        if(source.length != 4 || destination.length != 4) {
+            alert("Worng parameters")
+            return
+        }
+    } else {
+        alert("Worng parameters")
+        return
+    }
+
+    $.ajax({
+        url: API_URL + '/all_routes_avoiding_airline',
+        type: "GET",
+        crossDomain: true,
+        data: { 
+            source_airport_code: source,
+            destination_airport_code: destination,
+            airport_code_type: code,
+            airline_code: avoidairline
+        },
+        dataType: "json",
+        success: function (response) {
+            showFlights(response)
+        },
+        error: function (xhr, status) {
+            alert("error");
+        }
+    });
+
+})
+
+
+
+$('#search6').click(function(){
+    let source = $('#source6').val();
+    let destination = $('#destination6').val();
+    let avoidairport = $('#avoidairport6').val();
+    let code = $('#code6').val();
+
+    if(code.toLowerCase() === 'iata'){
+        if(source.length != 3 || destination.length != 3) {
+            alert("Worng parameters")
+            return
+        }
+    } else if(code.toLowerCase() === 'icao'){
+        if(source.length != 4 || destination.length != 4) {
+            alert("Worng parameters")
+            return
+        }
+    } else {
+        alert("Worng parameters")
+        return
+    }
+
+    $.ajax({
+        url: API_URL + '/all_routes_avoiding_airport',
+        type: "GET",
+        crossDomain: true,
+        data: { 
+            source_airport_code: source,
+            destination_airport_code: destination,
+            airport_code_type: code,
+            airport_code: avoidairport
+        },
+        dataType: "json",
+        success: function (response) {
+            showFlights(response)
+        },
+        error: function (xhr, status) {
+            alert("error");
+        }
+    });
+
+})
