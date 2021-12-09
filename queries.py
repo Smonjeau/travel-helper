@@ -25,7 +25,7 @@ def shorthest_route_between_two_airports(source, destination, code_type):
     from_code_condition = f"icao: \"{source}\"" if code_type == "ICAO" else f"iata: \"{source}\""
     destination_code_condition = f"icao: \"{destination}\"" if code_type == "ICAO" else f"iata: \"{destination}\""
 
-    return f"MATCH p=shortestPath((n:Airport {{{from_code_condition}}})-[:HAS_ROUTE_TO*1..{max_scales}]-(m:Airport {{{destination_code_condition}}})) WHERE SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p) RETURN p; "
+    return f"MATCH p=(n:Airport {{{from_code_condition}}})-[r:HAS_ROUTE_TO*1..{max_scales}]->(m:Airport {{{destination_code_condition}}}) WHERE SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p) RETURN r, nodes(p), reduce(distance=0, r in relationships(p) | distance + toInteger(r.distance)) AS totalDistance ORDER BY totalDistance ASC LIMIT 1;"
 
 
 def all_routes_between_two_airports_avoiding_airline(source, destination, code_type, airline_code, airline_code_type):

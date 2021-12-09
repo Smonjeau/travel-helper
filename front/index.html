@@ -65,6 +65,7 @@
                     <div class="uk-width-1-5">
                         <input class="uk-input uk-margin-small-bottom" type="text" id="source3" placeholder="Source Airport">
                     </div>
+                    <div class="uk-width-1-5"></div>
                     <div class="uk-width-1-5">
                         <select class="uk-select" id="code3">
                             <option>IATA</option>
@@ -74,9 +75,31 @@
                     <div class="uk-width-1-5">
                         <input class="uk-input uk-margin-small-bottom" type="number" max="2" min="0" value="0" id="scales3" placeholder="Scales">
                     </div>
-                    <div class="uk-width-1-5"></div>
                     <div class="uk-width-1-5">
                         <button class="uk-button uk-button-primary" id="search3">Search</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
+                <h3 class="uk-card-title">Shortest route</h3>
+                <div uk-grid>
+                    <div class="uk-width-1-5">
+                        <input class="uk-input uk-margin-small-bottom" type="text" id="source4" placeholder="Source Airport">
+                    </div>
+                    <div class="uk-width-1-5">
+                        <input class="uk-input uk-margin-small-bottom" type="text" id="destination4" placeholder="Destination Airport">
+                    </div>
+                    <div class="uk-width-1-5">
+                        <select class="uk-select" id="code4">
+                            <option>IATA</option>
+                            <option>ICAO</option>
+                        </select>
+                    </div>
+                    <div class="uk-width-1-5"></div>
+                    <div class="uk-width-1-5">
+                        <button class="uk-button uk-button-primary" id="search4">Search</button>
                     </div>
                 </div>
             </div>
@@ -86,45 +109,6 @@
         <!-- Results modal -->
         <div id="resultsModal" uk-modal>
             <div class="uk-modal-dialog uk-modal-body">
-                <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
-                    <div uk-grid>
-                        <div class="uk-width-1-2 uk-text-center">
-                            <p><b>EZE → MIA</b></p>
-                            <div uk-grid>
-                                <div class="uk-width-1-2 uk-text-muted uk-text-small">
-                                    Buenos Aires,<br>Argentina
-                                </div>
-                                <div class="uk-width-1-2 uk-text-muted uk-text-small">
-                                    Miami,<br>United States
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="uk-width-1-2 uk-text-center">
-                            <p>Aerolineas Argentinas<br>7000 km</p>
-                        </div>
-                    </div>
-                    <div uk-grid>
-                        <div class="uk-width-1-2 uk-text-center">
-                            <p><b>MIA → JFK</b></p>
-                            <div uk-grid>
-                                <div class="uk-width-1-2 uk-text-muted uk-text-small">
-                                    Miami,<br>United States
-                                </div>
-                                <div class="uk-width-1-2 uk-text-muted uk-text-small">
-                                    New York,<br>United States
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="uk-width-1-2 uk-text-center">
-                            <p>American Airlines<br>5000 km</p>
-                        </div>
-                    </div>
-                    
-                </div>
-                
-                
             </div>
         </div>
 
