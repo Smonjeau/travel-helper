@@ -114,18 +114,18 @@ def get_airports_reachable_from_airport(source_airport_code: str, airport_code_t
 
 
 @app.get("/queries/all_routes_avoiding_airline")
-def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airline_code: str, airline_code_type: str):
+def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airline_code: str):
 
     validate_airport_codes(airport_code_type, source_airport_code,
                            destination_airport_code)
-    validate_airline_code(airline_code, airline_code_type)
+    validate_airline_code(airline_code, airport_code_type)
     try:
         neo4jSession = neo4jClient.session()
         results = neo4jSession.run(
             all_routes_between_two_airports_avoiding_airline(source_airport_code.upper(),
                                                              destination_airport_code.upper(),
                                                              airport_code_type,
-                                                             airline_code.upper(), airline_code_type)
+                                                             airline_code.upper(), airport_code_type)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
