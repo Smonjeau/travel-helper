@@ -68,7 +68,6 @@ def parseTopAirports(results, mongoDB,key):
     for result in results:
         element = {}
         element['iata'] = result['iata']
-
         airport = airports.find_one({'iata': {'$eq': element['iata']}})
         element['icao'] = airport['icao']
         element['name'] = airport['name']
