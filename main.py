@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from neo4j import GraphDatabase
+import pymongo
 from utils import validate_airport_codes, parseResults, max_scales
 from queries import airports_reachable, all_routes_between_two_airports_avoiding_airline, routes_with_scales_support, shorthest_route_between_two_airports
 import os
@@ -10,6 +11,7 @@ app.mount("/front", StaticFiles(directory="front", html=True), name="static")
 
 
 neo4j_port = os.environ.get('NEO4J_PORT', 7687)
+mongo_port = os.environ.get('MONGO_PORT', 27017)
 
 # TODO siempre acordarse de pasar todo a mayuscula o minuscula para comparar
 # TODO al comparar code_types pasar a minuscula
@@ -19,6 +21,9 @@ neo4j_port = os.environ.get('NEO4J_PORT', 7687)
 #neo4jClient = GraphDatabase.driver(f"neo4j://192.168.0.246/:{neo4j_port}")
 
 neo4jClient = GraphDatabase.driver(f"neo4j://127.0.0.1/:{neo4j_port}")
+mongoClient = pymongo.MongoClient(port=mongo_port)
+
+mongoDB = mongoClient['travel-helper']
 
 # neo4jClient = GraphDatabase.driver(f"neo4j://localhost:{neo4j_port}")
 
@@ -43,8 +48,8 @@ def get_all_routes_between_two_airports(source_airport_code: str, destination_ai
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-    return parseResults(result, airport_code_type)
+     
+    return parseResults(result, airport_code_type, mongoDB)
 
 
 @app.get("/queries/all_routes_with_scales")
@@ -63,8 +68,10 @@ def get_all_routes_between_two_airports_with_scales(source_airport_code: str, de
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-    return parseResults(results, airport_code_type)
+    
+    return parseResults(results, airport_code_type, mongoDB)
+    
+    
 
 
 # query 1
@@ -82,8 +89,8 @@ def get_shorthest_route_between_two_airports(source_airport_code: str, destinati
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-    return parseResults(results, airport_code_type)
+    
+    return parseResults(results, airport_code_type, mongoDB)
 
 
 @app.get("/queries/airports_reachable_from_airport")
@@ -105,7 +112,7 @@ def get_airports_reachable_from_airport(source_airport_code: str, airport_code_t
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-    return parseResults(results, airport_code_type)
+    return parseResults(results, airport_code_type, mongoDB)
 
 
 @app.get("/queries/all_routes_avoiding_airline")
@@ -126,4 +133,4 @@ def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: st
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-    return parseResults(results, airport_code_type)
+    return parseResults(results, airport_code_type,mongoDB)
