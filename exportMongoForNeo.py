@@ -18,9 +18,9 @@ for airport in airports:
 
 routes_out = csv.writer(open("data/routes_neo.csv", "w"))
 routes_headers = ['source_airport_id',
-                  'destination_airport_id', 'distance', 'airline_id']
+                  'destination_airport_id', 'distance', 'icao', 'iata']
 routes_out.writerow(routes_headers)
 routes = mongoDb.routes.find({})
 for route in routes:
     routes_out.writerow([route['source_airport_id'],
-                        route['destination_airport_id'], route['distance'], route['airline_id']])
+                        route['destination_airport_id'], route['distance'], route.get('icao','null'), route.get('iata','null')])

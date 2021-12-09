@@ -23,5 +23,5 @@ with open('data/routes_neo.csv', 'r') as routes:
     transaction = neo4jSession.begin_transaction()
     for route in reader:
         transaction.run(
-         f"MATCH (a:Airport {{ airport_id: {route['source_airport_id']}}}), (b:Airport {{ airport_id: {route['destination_airport_id']}}}) CREATE (a)-[r:HAS_ROUTE_TO {{ distance: {route['distance']} }}]->(b)")
+         f"MATCH (a:Airport {{ airport_id: {route['source_airport_id']}}}), (b:Airport {{ airport_id: {route['destination_airport_id']}}}) CREATE (a)-[r:HAS_ROUTE_TO {{ distance: {route['distance']}, iata: \"{route['iata']}\", icao: \"{route:'icao'}\" }}]->(b)")
     transaction.commit()

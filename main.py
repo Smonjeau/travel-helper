@@ -131,3 +131,22 @@ def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: st
         raise HTTPException(status_code=500, detail=str(e))
 
     return parseResults(results, airport_code_type, mongoDB)
+
+@app.get("/queries/all_routes_avoiding_airport")
+def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airport_code: str):
+
+    validate_airport_codes(source_airport_code,
+                           destination_airport_code, airport_code_type)
+
+    try:
+        neo4jSession = neo4jClient.session()
+        results = neo4jSession.run(
+            all_routes_between_two_airports_avoiding_airline(source_airport_code.upper(),
+                                                             destination_airport_code.upper(),
+                                                             airport_code_type,
+                                                             airline_code.upper())
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    return parseResults(results, airport_code_type, mongoDB)
