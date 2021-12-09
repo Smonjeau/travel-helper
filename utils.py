@@ -3,7 +3,7 @@ from fastapi import HTTPException
 max_scales = 2
 
 
-def validate_airport_codes(airport_code_type,*args):
+def validate_airport_codes(airport_code_type, *args):
     if airport_code_type == "IATA":
         if (len(list(filter(lambda x: len(x) != 3, args))) > 0):
             raise HTTPException(
@@ -60,3 +60,20 @@ def parseResults(results, code_type, mongoDB):
         all_results.append(new_result)
 
     return all_results
+
+
+def parseTopAirports(results, mongoDB,key):
+    response = []
+    airports = mongoDB.airports
+    for result in results:
+        element = {}
+        element['iata'] = result['iata']
+
+        airport = airports.find_one({'iata': {'$eq': element['iata']}})
+        element['icao'] = airport['icao']
+        element['name'] = airport['name']
+        element['country'] = airport['country']
+        element['city'] = airport['city']
+        element[key] = result[key]
+        response.append(element)
+    return response

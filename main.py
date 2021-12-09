@@ -2,8 +2,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from neo4j import GraphDatabase
 import pymongo
-from utils import validate_airline_code, validate_airport_codes, parseResults, max_scales
-from queries import airports_reachable, all_routes_between_two_airports_avoiding_airline, all_routes_between_two_airports_avoiding_airport, routes_with_scales_support, shorthest_route_between_two_airports
+from utils import parseTopAirports, validate_airline_code, validate_airport_codes, parseResults, max_scales
+from queries import airports_reachable, airports_with_most_routes, all_routes_between_two_airports_avoiding_airline, all_routes_between_two_airports_avoiding_airport, most_popular_airports, routes_with_scales_support, shorthest_route_between_two_airports
 import os
 app = FastAPI()
 
@@ -151,3 +151,39 @@ def get_all_routes_between_two_airports_avoiding_airport(source_airport_code: st
         raise HTTPException(status_code=500, detail=str(e))
 
     return parseResults(results, airport_code_type, mongoDB)
+
+
+@app.get("/queries/airports_with_most_routes")
+def get_airports_with_most_routes( number_of_airports: int):
+    
+        if(number_of_airports < 0):
+            raise HTTPException(
+                status_code=400, detail="Number of airports must be at least 0")
+    
+        try:
+            neo4jSession = neo4jClient.session()
+            results = neo4jSession.run(
+                airports_with_most_routes(number_of_airports)
+            )
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+        
+        return parseTopAirports(results, mongoDB,"outgoing")
+
+@app.get("/queries/most_popular_airports")
+def get_airports_with_most_routes( number_of_airports: int):
+    
+        if(number_of_airports < 0):
+            raise HTTPException(
+                status_code=400, detail="Number of airports must be at least 0")
+    
+        try:
+            neo4jSession = neo4jClient.session()
+            results = neo4jSession.run(
+                most_popular_airports(number_of_airports)
+            )
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+        
+        return parseTopAirports(results, mongoDB,"incoming")
+

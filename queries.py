@@ -48,3 +48,16 @@ def all_routes_between_two_airports_avoiding_airport(source, destination, avoid,
             f"WHERE ALL(airport IN NODES(p) WHERE airport.{avoid_code_condition}) "
             "AND SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p) "
             "return p,r")
+
+
+def airports_with_most_routes(number_of_airports):
+    return f"MATCH (a)-[r]->(b)" \
+            "RETURN COALESCE(a.iata) as iata, " \
+            "count(*) AS outgoing " \
+            f"ORDER BY outgoing DESC LIMIT {number_of_airports}"
+
+def most_popular_airports(number_of_airports):
+    return f"MATCH (a)<-[r]-(b)" \
+            "RETURN COALESCE(a.iata) as iata, " \
+            "count(*) AS incoming " \
+            f"ORDER BY incoming DESC LIMIT {number_of_airports}"
