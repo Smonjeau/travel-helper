@@ -3,7 +3,24 @@ const API_URL = 'http://localhost:8000/queries';
 const resultsModal = UIkit.modal('#resultsModal');
 const resultsModalContent = $('#resultsModal .uk-modal-body');
 
-//TODO Los airline_id cambiar por nombre de la aerolinea
+
+function showFlights(response) {
+    resultsModal.show();
+    resultsModalContent.html('');
+    let aux = "";
+    response.forEach(tracks => {
+        aux = "<div class=\"uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom\">";
+        tracks.forEach(track => {
+            aux += "<div uk-grid><div class=\"uk-width-1-2 uk-text-center\"><p><b>" + track.source + " → " + track.destination;
+            aux += "</b></p><div uk-grid><div class=\"uk-width-1-2 uk-text-muted uk-text-small\">"+track.source_city+",<br>"+track.source_country
+            aux += "</div><div class=\"uk-width-1-2 uk-text-muted uk-text-small\">"+track.destination_city+",<br>"+track.destination_country
+            aux += "</div></div></div><div class=\"uk-width-1-2 uk-text-center\"><p>" + track.airline_name + "<br>" + Math.ceil(track.distance) + " km</p>";
+            aux += "</div></div>";
+        });                
+        aux += "</div>";
+        resultsModalContent.append(aux)
+    });
+}
 
 $('#search1').click(function(){
     let source = $('#source1').val();
@@ -36,17 +53,7 @@ $('#search1').click(function(){
         },
         dataType: "json",
         success: function (response) {
-            resultsModal.show();
-            resultsModalContent.html('');
-            let aux = "";
-            response.forEach(tracks => {
-                aux = "<div class=\"uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom\">";
-                tracks.forEach(track => {
-                    aux += "<p>" + track.source + " -> " + track.destination + " | " + track.airline_id + " " + Math.ceil(track.distance) + "km</p>";
-                });
-                aux += "</div>";
-                resultsModalContent.append(aux)
-            });
+            showFlights(response)
         },
         error: function (xhr, status) {
             alert("error");
@@ -88,17 +95,7 @@ $('#search2').click(function(){
         },
         dataType: "json",
         success: function (response) {
-            resultsModal.show();
-            resultsModalContent.html('');
-            let aux = "";
-            response.forEach(tracks => {
-                aux = "<div class=\"uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom\">";
-                tracks.forEach(track => {
-                    aux += "<p>" + track.source + " -> " + track.destination + " | " + track.airline_id + " " + Math.ceil(track.distance) + "km</p>";
-                });
-                aux += "</div>";
-                resultsModalContent.append(aux)
-            });
+            showFlights(response)
         },
         error: function (xhr, status) {
             alert("error");
@@ -138,17 +135,7 @@ $('#search3').click(function(){
         },
         dataType: "json",
         success: function (response) {
-            resultsModal.show();
-            resultsModalContent.html('');
-            let aux = "";
-            response.forEach(tracks => {
-                aux = "<div class=\"uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom\">";
-                tracks.forEach(track => {
-                    aux += "<p>" + track.source + " -> " + track.destination + " | " + track.airline_id + " " + Math.ceil(track.distance) + "km</p>";
-                });
-                aux += "</div>";
-                resultsModalContent.append(aux)
-            });
+            showFlights(response)
         },
         error: function (xhr, status) {
             alert("error");
