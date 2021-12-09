@@ -11,15 +11,15 @@ def routes_with_scales_support (mins_scales, _max_scales, source, destination, c
     from_code_condition = f"icao: \"{source}\"" if code_type == "ICAO" else f"iata: \"{source}\""
     destination_code_condition = f"icao: \"{destination}\"" if code_type == "ICAO" else f"iata: \"{destination}\""
 
-    return f"MATCH p=(n:Airport {{{from_code_condition}}}) -[:HAS_ROUTE_TO*{scales_multiplier}]->(m:Airport{{{destination_code_condition}}}) WITH *,relationships(p) as r RETURN r,nodes(p)"
+    return f"MATCH p=(n:Airport {{{from_code_condition}}}) -[:HAS_ROUTE_TO*{scales_multiplier}]->(m:Airport{{{destination_code_condition}}}) WITH *, relationships(p) as r WHERE SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p) RETURN r,nodes(p)"
 
-def airports_reachable_from_airport(source, scales, code_type):
+def airports_reachable(source, scales, code_type):
     scales += 1
     from_code_condition = f"icao: \"{source}\"" if code_type == "ICAO" else f"iata: \"{source}\""
-    return f"MATCH p=(n:Airport {{{from_code_condition}}}) -[:HAS_ROUTE_TO*{scales}]->(m:Airport) WITH *,relationships(p) as r RETURN p,r"
+    return f"MATCH p=(n:Airport {{{from_code_condition}}}) -[:HAS_ROUTE_TO*{scales}]->(m:Airport) WITH *,relationships(p) as r WHERE SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p) RETURN p,r"
 
 def shorthest_route_between_two_airports(source, destination, code_type):
     from_code_condition = f"icao: \"{source}\"" if code_type == "ICAO" else f"iata: \"{source}\""
     destination_code_condition = f"icao: \"{destination}\"" if code_type == "ICAO" else f"iata: \"{destination}\""
 
-    return f"MATCH p=shortestPath((n:Airport {{{from_code_condition}}})-[:HAS_ROUTE_TO*1..{max_scales}]-(m:Airport {{{destination_code_condition}}}))RETURN p; "
+    return f"MATCH p=shortestPath((n:Airport {{{from_code_condition}}})-[:HAS_ROUTE_TO*1..{max_scales}]-(m:Airport {{{destination_code_condition}}})) WHERE SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p) RETURN p; "

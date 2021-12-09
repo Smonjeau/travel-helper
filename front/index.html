@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title>Travel Helper</title>
+
+        <meta charset="utf-8">
+
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/css/uikit.min.css" />
+    </head>
+    <body>
+
+        <div class="uk-container uk-container-small uk-margin-large-top">
+            <h1 class="uk-text-center uk-margin-bottom">Travel Helper</h1>
+            <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
+                <h3 class="uk-card-title">All routes from A to B</h3>
+                <div uk-grid>
+                    <div class="uk-width-1-5">
+                        <input class="uk-input uk-margin-small-bottom" type="text" id="source1" placeholder="Source Airport">
+                    </div>
+                    <div class="uk-width-1-5">
+                        <input class="uk-input uk-margin-small-bottom" type="text" id="destination1" placeholder="Destination Airport">
+                    </div>
+                    <div class="uk-width-1-5">
+                        <select class="uk-select" id="code1">
+                            <option>IATA</option>
+                            <option>ICAO</option>
+                        </select>
+                    </div>
+                    <div class="uk-width-1-5"></div>
+                    <div class="uk-width-1-5">
+                        <button class="uk-button uk-button-primary" id="search1">Search</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
+                <h3 class="uk-card-title">All routes from A to B with N scales</h3>
+                <div uk-grid>
+                    <div class="uk-width-1-5">
+                        <input class="uk-input uk-margin-small-bottom" type="text" id="source2" placeholder="Source Airport">
+                    </div>
+                    <div class="uk-width-1-5">
+                        <input class="uk-input uk-margin-small-bottom" type="text" id="destination2" placeholder="Destination Airport">
+                    </div>
+                    <div class="uk-width-1-5">
+                        <select class="uk-select" id="code2">
+                            <option>IATA</option>
+                            <option>ICAO</option>
+                        </select>
+                    </div>
+                    <div class="uk-width-1-5">
+                        <input class="uk-input uk-margin-small-bottom" type="number" max="2" min="0" value="0" id="scales2" placeholder="Scales">
+                    </div>
+                    <div class="uk-width-1-5">
+                        <button class="uk-button uk-button-primary" id="search2">Search</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom">
+                <h3 class="uk-card-title">All airports reachable from airport</h3>
+                <div uk-grid>
+                    <div class="uk-width-1-5">
+                        <input class="uk-input uk-margin-small-bottom" type="text" id="source3" placeholder="Source Airport">
+                    </div>
+                    <div class="uk-width-1-5">
+                        <select class="uk-select" id="code3">
+                            <option>IATA</option>
+                            <option>ICAO</option>
+                        </select>
+                    </div>
+                    <div class="uk-width-1-5">
+                        <input class="uk-input uk-margin-small-bottom" type="number" max="2" min="0" value="0" id="scales3" placeholder="Scales">
+                    </div>
+                    <div class="uk-width-1-5"></div>
+                    <div class="uk-width-1-5">
+                        <button class="uk-button uk-button-primary" id="search3">Search</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Results modal -->
+        <div id="resultsModal" uk-modal>
+            <div class="uk-modal-dialog uk-modal-body">
+                
+                
+            </div>
+        </div>
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        
+        <!-- UIkit JS -->
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.9.4/dist/js/uikit-icons.min.js"></script>
+
+        <script src="scripts.js" type="text/javascript"></script>
+    </body>
+</html>

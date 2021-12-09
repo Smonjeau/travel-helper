@@ -22,7 +22,9 @@ def parseResults(results, code_type):
         for direct_route in result['r']:
             new_result.append({
                 'source': direct_route.nodes[0][code_type],
-                'destination': direct_route.nodes[1][code_type]
+                'destination': direct_route.nodes[1][code_type],
+                'distance': direct_route['distance'],
+                'airline_id': direct_route['airline_id'],
             })
         all_results.append(new_result)        
         

@@ -1,9 +1,12 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 from neo4j import GraphDatabase
 from utils import validate_airport_codes, parseResults, max_scales
-from queries import airports_reachable_from_airport, routes_with_scales_support, shorthest_route_between_two_airports
+from queries import airports_reachable, routes_with_scales_support, shorthest_route_between_two_airports
 import os
 app = FastAPI()
+
+app.mount("/front", StaticFiles(directory="front", html=True), name="static")
 
 
 
@@ -41,7 +44,7 @@ def get_all_routes_between_two_airports(source_airport_code: str, destination_ai
     try:
         neo4jSession = neo4jClient.session()
         result  = neo4jSession.run( 
-            routes_with_scales_support(0, max_scales, source_airport_code,destination_airport_code, airport_code_type)
+            routes_with_scales_support(0, max_scales, source_airport_code.upper(),destination_airport_code.upper(), airport_code_type)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -64,7 +67,7 @@ def get_all_routes_between_two_airports_with_scales(source_airport_code: str, de
     try:
         neo4jSession = neo4jClient.session()
         results = neo4jSession.run(
-            routes_with_scales_support(scales, scales, source_airport_code,destination_airport_code, airport_code_type)
+            routes_with_scales_support(scales, scales, source_airport_code.upper(),destination_airport_code.upper(), airport_code_type)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -83,7 +86,7 @@ def get_shorthest_route_between_two_airports(source_airport_code: str, destinati
     try:
         neo4jSession = neo4jClient.session()
         results = neo4jSession.run(
-            shorthest_route_between_two_airports(source_airport_code, destination_airport_code, airport_code_type)     
+            shorthest_route_between_two_airports(source_airport_code.upper(), destination_airport_code.upper(), airport_code_type)     
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -91,7 +94,7 @@ def get_shorthest_route_between_two_airports(source_airport_code: str, destinati
     return parseResults(results, airport_code_type)
 
 @app.get("/queries/airports_reachable_from_airport")
-def get_airports_reachable_from_airport(source_airport_code: str, airport_code_type: str,scales:int): 
+def get_airports_reachable_from_airport(source_airport_code: str, airport_code_type: str, scales: int): 
 
     validate_airport_codes(source_airport_code, source_airport_code, airport_code_type)
 
@@ -101,7 +104,7 @@ def get_airports_reachable_from_airport(source_airport_code: str, airport_code_t
     try:
         neo4jSession = neo4jClient.session()
         results = neo4jSession.run(
-            airports_reachable_from_airport(source_airport_code, scales, airport_code_type)
+            airports_reachable(source_airport_code.upper(), scales, airport_code_type)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
