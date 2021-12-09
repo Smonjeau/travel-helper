@@ -17,7 +17,7 @@ docker pull fquesada00/travel-helper-neo
 
 Create the mongo container
 ```bash
-docker run --name travel-helper-mongo -p 27017:27017 -d fquesada/travel-helper-mongo
+docker run --name travel-helper-mongo -p 27017:27017 -d fquesada00/travel-helper-mongo
 ```
 Create the neo4j container (might take about 10 minutes)
 
