@@ -48,7 +48,7 @@ def get_all_routes_between_two_airports(source_airport_code: str, destination_ai
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-     
+
     return parseResults(result, airport_code_type, mongoDB)
 
 
@@ -68,10 +68,8 @@ def get_all_routes_between_two_airports_with_scales(source_airport_code: str, de
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
     return parseResults(results, airport_code_type, mongoDB)
-    
-    
 
 
 # query 1
@@ -89,7 +87,7 @@ def get_shorthest_route_between_two_airports(source_airport_code: str, destinati
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
     return parseResults(results, airport_code_type, mongoDB)
 
 
@@ -123,14 +121,13 @@ def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: st
 
     try:
         neo4jSession = neo4jClient.session()
-        string = all_routes_between_two_airports_avoiding_airline(source_airport_code.upper(
-        ), destination_airport_code.upper(), airport_code_type, airline_code.upper())
-        print(string)
         results = neo4jSession.run(
-            string
+            all_routes_between_two_airports_avoiding_airline(source_airport_code.upper(),
+                                                             destination_airport_code.upper(),
+                                                             airport_code_type,
+                                                             airline_code.upper())
         )
-        print(results)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-    return parseResults(results, airport_code_type,mongoDB)
+    return parseResults(results, airport_code_type, mongoDB)
