@@ -171,7 +171,7 @@ def get_airports_with_most_routes( number_of_airports: int):
         return parseTopAirports(results, mongoDB,"outgoing")
 
 @app.get("/queries/most_popular_airports")
-def get_airports_with_most_routes( number_of_airports: int):
+def get_most_popular_airports( number_of_airports: int):
     
         if(number_of_airports < 0):
             raise HTTPException(

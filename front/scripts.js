@@ -22,6 +22,24 @@ function showFlights(response) {
     });
 }
 
+
+function showAirports(response, key) {
+    resultsModal.show();
+    resultsModalContent.html('');
+    let aux = "";
+    response.forEach(airport => {
+        aux = "<div class=\"uk-card uk-card-default uk-card-body uk-margin-top uk-margin-bottom\">";
+
+        aux += "<div uk-grid><div class=\"uk-width-1-4 uk-text-center\"><b>"+(key == 'incoming' ? airport.incoming : airport.outgoing)+"</b></div>";
+        aux += "<div class=\"uk-width-1-4 uk-text-center\">" + airport.iata + " / " + airport.icao;
+        aux += "</div><div class=\"uk-width-1-4 uk-text-center\">"+airport.name
+        aux += "</div><div class=\"uk-width-1-4 uk-text-center\">" + airport.city + ", " + airport.country;
+        aux += "</div></div></div>";
+        
+        resultsModalContent.append(aux)
+    });
+}
+
 $('#search1').click(function(){
     let source = $('#source1').val();
     let destination = $('#destination1').val();
@@ -262,6 +280,53 @@ $('#search6').click(function(){
         dataType: "json",
         success: function (response) {
             showFlights(response)
+        },
+        error: function (xhr, status) {
+            alert("error");
+        }
+    });
+
+})
+
+
+
+$('#search7').click(function(){
+    let number = $('#number7').val();
+
+
+    $.ajax({
+        url: API_URL + '/most_popular_airports',
+        type: "GET",
+        crossDomain: true,
+        data: { 
+            number_of_airports: number
+        },
+        dataType: "json",
+        success: function (response) {
+            showAirports(response, "incoming")
+        },
+        error: function (xhr, status) {
+            alert("error");
+        }
+    });
+
+})
+
+
+$('#search8').click(function(){
+    let number = $('#number8').val();
+
+
+    $.ajax({
+        url: API_URL + '/airports_with_most_routes',
+        type: "GET",
+        crossDomain: true,
+        data: { 
+            number_of_airports: number
+        },
+        dataType: "json",
+        success: function (response) {
+            showAirports(response, "outgoing")
         },
         error: function (xhr, status) {
             alert("error");
