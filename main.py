@@ -82,8 +82,7 @@ def get_shorthest_route_between_two_airports(source_airport_code: str, destinati
     try:
         neo4jSession = neo4jClient.session()
         results = neo4jSession.run(
-            shorthest_route_between_two_airports(source_airport_code.upper(
-            ), destination_airport_code.upper(), airport_code_type)
+            shorthest_route_between_two_airports(source_airport_code.upper(), destination_airport_code.upper(), airport_code_type)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
