@@ -21,7 +21,7 @@ def parseResults(results, code_type, mongoDB):
     for result in results:
         new_result = []
         for direct_route in result['r']:
-            this_airline = airlines.find_one({"airline_id": { '$eq': int(direct_route['airline_id']) }})
+            this_airline = airlines.find_one({'$or':[{'iata':{'$eq':direct_route['iata']}},{'icao':{'$eq':direct_route['icao']}}]})
             this_source = airports.find_one({code_type: { '$eq': direct_route.nodes[0][code_type] }})
             this_destination = airports.find_one({code_type: { '$eq': direct_route.nodes[1][code_type] }})
 

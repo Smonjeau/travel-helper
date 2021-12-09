@@ -28,11 +28,12 @@ def shorthest_route_between_two_airports(source, destination, code_type):
     return f"MATCH p=shortestPath((n:Airport {{{from_code_condition}}})-[:HAS_ROUTE_TO*1..{max_scales}]-(m:Airport {{{destination_code_condition}}})) WHERE SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p) RETURN p; "
 
 
-def all_routes_between_two_airports_avoiding_airline(source, destination, code_type, airline):
+def all_routes_between_two_airports_avoiding_airline(source, destination, code_type, airline_code, airline_code_type):
     from_code_condition = f"icao: \"{source}\"" if code_type == "ICAO" else f"iata: \"{source}\" "
     destination_code_condition = f"icao: \"{destination}\"" if code_type == "ICAO" else f"iata: \"{destination}\" "
+    airline_code_condition = f"icao = \"{airline_code}\"" if airline_code_type == "ICAO" else f"iata = \"{airline_code}\" "
     return (f"MATCH p=(n:Airport {{{from_code_condition}}})-[r:HAS_ROUTE_TO*1..{max_scales}]->(m:Airport {{{destination_code_condition}}}) "
             "WITH *,relationships(p) as r "
-            f"WHERE NOT ANY(route IN r WHERE route.airline_id = \"{airline}\") "
-            "AND SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p)"
+            f"WHERE NOT ANY(route IN r WHERE route.{airline_code_condition}) "
+            "AND SIZE(apoc.coll.toSet(NODES(p))) > LENGTH(p) "
             "return p,r")

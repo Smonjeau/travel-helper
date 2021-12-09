@@ -114,7 +114,7 @@ def get_airports_reachable_from_airport(source_airport_code: str, airport_code_t
 
 
 @app.get("/queries/all_routes_avoiding_airline")
-def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airline_code: str):
+def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airline_code: str, airline_code_type: str):
 
     validate_airport_codes(source_airport_code,
                            destination_airport_code, airport_code_type)
@@ -125,12 +125,13 @@ def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: st
             all_routes_between_two_airports_avoiding_airline(source_airport_code.upper(),
                                                              destination_airport_code.upper(),
                                                              airport_code_type,
-                                                             airline_code.upper())
+                                                             airline_code.upper(), airline_code_type)
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
     return parseResults(results, airport_code_type, mongoDB)
+
 
 @app.get("/queries/all_routes_avoiding_airport")
 def get_all_routes_between_two_airports_avoiding_airline(source_airport_code: str, destination_airport_code: str, airport_code_type: str, airport_code: str):
