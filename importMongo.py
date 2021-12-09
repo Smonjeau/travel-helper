@@ -79,6 +79,11 @@ mongoDb.airports.create_index([('geom', pymongo.GEOSPHERE)])
 
 mongoDb.airports.create_index('airport_id')
 
+mongoDb.airports.create_index('iata')
+
+mongoDb.airports.create_index('icao')
+
+
 documents = []
 for country in countries:
     document = {}
