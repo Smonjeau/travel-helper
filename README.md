@@ -2,9 +2,10 @@
 
 ## Considerations
 - Airport codes can be [IATA](https://www.nationsonline.org/oneworld/IATA_Codes/airport_code_list.htm) or [ICAO](https://en.wikipedia.org/wiki/List_of_airports_by_ICAO_code:_A).
-- Airlines codes can be also [IATA or ICAO] (https://en.wikipedia.org/wiki/List_of_airline_codes)
-- The maximum number of scales is 2. (Can be modified from the code)
-- The page size is 10. (Can be modified from the code)
+- [Airlines codes](https://en.wikipedia.org/wiki/List_of_airline_codes) can be also IATA or ICAO.
+- The maximum number of scales is 2. (can be modified from the code)
+- The page size is 10. (can be modified from the code)
+
 ## Set up
 
 Pull docker images
@@ -48,6 +49,11 @@ uvicorn main:app --reload
 ```
 
 ## Front-end
-It's located at <server_url>/front
+
+It's located at <server_url>:8000/front
+
+## Interactive API documentation
+
+It's located at <server_url>:8000/docs
 
 The last field of the queries is for the page
